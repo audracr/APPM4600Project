@@ -1,0 +1,71 @@
+import numpy as np
+import numpy.linalg as la
+from scipy.linalg import inv
+from matplotlib import pyplot as plt
+from scipy import differentiate
+
+
+def Rosen_fun_d1(x_guess):
+    term_1 = 100*(x_guess[1]-x_guess[0]**2)**2+(x_guess[0]-1)**2
+    return term_1
+
+def Rosen_fun_d2(x_guess):
+    term_1 = 100*(x_guess[1]-x_guess[0]**2)**2+(x_guess[0]-1)**2
+    term_2 = 100*(x_guess[2]-x_guess[1]**2)**2+(x_guess[1]-1)**2
+    return term_1 + term_2
+
+def Rosen_fun_d3(x_guess):
+    term_1 = 100*(x_guess[1]-x_guess[0]**2)**2+(x_guess[0]-1)**2
+    term_2 = 100*(x_guess[2]-x_guess[1]**2)**2+(x_guess[1]-1)**2
+    term_3 = 100*(x_guess[3]-x_guess[2]**2)**2+(x_guess[2]-1)**2
+    return term_1 + term_2 + term_3
+
+def Hessian(x_guess):
+    H = differentiate.hessian(Rosen_fun_d1,x_guess)
+    return H
+
+def Newton_Rosenbrack_d1(tol):
+    count = 0 # this variable is a safegaurd against infinite loops
+    x = np.array([1.05,1.6]) # this is our initial guess, and later our x_n
+    print(x)
+    print(Rosen_fun_d1(x))
+    x1 = 2 * x # after this, we use x1 to save our x_n-1
+    while (count < 500 and (np.abs(Rosen_fun_d1(x)-Rosen_fun_d1(x1))) > tol).all():
+        #While we're done less then 100 iters
+        #While |f(x_n)-f(x_n-1)| is less then tol
+        count = count + 1
+        print(count)
+        hessian = Hessian(x) # for Newton direction
+        x1 = x # save x_n-1
+        alpha = 1 # size of Newton step
+        # this iterates through smaller and smaller newton steps (sizes of alpha)
+        for i in range(100):
+            x_old = x
+            x = x - alpha*(inv(hessian.ddf)@x)
+            print(Rosen_fun_d1(x))
+            #print(x)
+            if (Rosen_fun_d1(x) > Rosen_fun_d1(x_old)): # if the old x had a smaller output
+                x = x_old
+                alpha = alpha / 2
+            elif (Rosen_fun_d1(x) < Rosen_fun_d1(x_old)): # if the old x had a larger output
+                break
+            else:
+                x = x_old
+        print('x is:')
+        print(x)
+        print(Rosen_fun_d1(x))
+        print('change:')
+        print(Rosen_fun_d1(x)-Rosen_fun_d1(x1))
+        #break
+    print('num iters: ')
+    print(count)
+    print('xmin: ')
+    print(x)
+    
+
+Newton_Rosenbrack_d1(1e-16)
+
+#print(Rosen_fun_d1(np.array([guess,guess])))
+#print(Hessian(np.array([guess,guess])))
+
+
