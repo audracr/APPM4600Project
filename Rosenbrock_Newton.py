@@ -86,11 +86,13 @@ def Newton_Rosenbrack_d1(tol):
     print(rnN[0:(numN-1)])
     errN = np.max(np.abs(rnN[0:(numN-1)]-rN),1);
     plt.plot(np.arange(numN-1),np.log10(errN+1e-18),'b-o',label='Newton');
-    plt.title('Newton iteration log10|r-rn|');
+    plt.title('d=2 Newton: log₁₀|x - x*|')
+    plt.xlabel('Iteration')
+    plt.ylabel('log₁₀(Error)')
     plt.legend();
     plt.show();
 
-Newton_Rosenbrack_d1(1e-16)
+Newton_Rosenbrack_d1(1e-14)
 
 #print(Rosen_fun_d1(np.array([guess,guess])))
 #print(Hessian(np.array([guess,guess])))
@@ -100,7 +102,7 @@ Newton_Rosenbrack_d1(1e-16)
 
 def Newton_Rosenbrack_d2(tol):
     count = 0 # this variable is a safegaurd against infinite loops
-    x = np.array([15,15,15]) # this is our initial guess, and later our x_n
+    x = np.array([10,10,10]) # this is our initial guess, and later our x_n
     rn = np.array([x])
     x1 = 2 * x # after this, we use x1 to save our x_n-1
     while (count < 100 and (np.abs(Rosen_fun_d2(x)-Rosen_fun_d2(x1))) > tol):
@@ -132,11 +134,13 @@ def Newton_Rosenbrack_d2(tol):
     print(rnN[0:(numN-1)])
     errN = np.max(np.abs(rnN[0:(numN-1)]-rN),1);
     plt.plot(np.arange(numN-1),np.log10(errN+1e-18),'b-o',label='Newton');
-    plt.title('Newton iteration log10|r-rn|');
+    plt.title('d=3 Newton: log₁₀|x - x*|')
+    plt.xlabel('Iteration')
+    plt.ylabel('log₁₀(Error)')
     plt.legend();
     plt.show();
 
-Newton_Rosenbrack_d2(1e-16)
+Newton_Rosenbrack_d2(1e-14)
 
 #print(Rosen_fun_d1(np.array([guess,guess])))
 #print(Hessian(np.array([guess,guess])))
@@ -177,11 +181,13 @@ def Newton_Rosenbrack_d3(tol):
     print(rnN[0:(numN-1)])
     errN = np.max(np.abs(rnN[0:(numN-1)]-rN),1);
     plt.plot(np.arange(numN-1),np.log10(errN+1e-18),'b-o',label='Newton');
-    plt.title('Newton iteration log10|r-rn|');
+    plt.title('d=4 Newton: log₁₀|x - x*|')
+    plt.xlabel('Iteration')
+    plt.ylabel('log₁₀(Error)')
     plt.legend();
     plt.show();
 
-Newton_Rosenbrack_d3(1e-16)
+Newton_Rosenbrack_d3(1e-14)
 
 #print(Rosen_fun_d1(np.array([guess,guess])))
 #print(Hessian(np.array([guess,guess])))

@@ -5,6 +5,7 @@ from matplotlib import pyplot as plt
 from scipy import differentiate
 from timeit import default_timer as timer
 
+
 def f(x): #currently this is just Rosenbrock written by a fellow better at code then I
     #FUNCTION TO BE OPTIMISED
     d = len(x)
@@ -61,38 +62,50 @@ def Newton(guess,tol):
     plt.plot(np.arange(numN-1),np.log10(errN+1e-18),'b-o',label='Newton');
     plt.title('Newton iteration log10|r-rn|');
     plt.legend();
-    plt.show();
+    #plt.show();
 
-guess2 = 100*np.ones(2)
-guess5 = 100*np.ones(5)
-guess10 = 100*np.ones(10)
-guess50 = 100*np.ones(50)
-guess100 = 100*np.ones(100)
+guess2 = 10*np.ones(2)
+guess5 = 10*np.ones(5)
+guess10 = 10*np.ones(10)
+guess50 = 10*np.ones(50)
+guess100 = 10*np.ones(100)
+guess500 = 10*np.ones(500)
+guess1000 = 10*np.ones(1000)
 
 start = timer()
-Newton(guess2,1e-16)
+#Newton(guess2,1e-5)
 end = timer()
 t2 = end - start
 
 start = timer()
-Newton(guess5,1e-16)
+#Newton(guess5,1e-5)
 end = timer()
 t5 = end - start
 
 start = timer()
-Newton(guess10,1e-16)
+#Newton(guess10,1e-5)
 end = timer()
 t10 = end - start
 
 start = timer()
-Newton(guess50,1e-16)
+#Newton(guess50,1e-5)
 end = timer()
 t50 = end - start
 
 start = timer()
-Newton(guess100,1e-16)
+#Newton(guess100,1e-5)
 end = timer()
 t100 = end - start
+
+start = timer()
+Newton(guess500,1e-5)
+end = timer()
+t500 = end - start
+
+start = timer()
+#Newton(guess1000,1e-5)
+end = timer()
+t1000 = end - start
 
 print('time 2d:')
 print(t2)
@@ -104,6 +117,10 @@ print('time 50d:')
 print(t50)
 print('time 100d:')
 print(t100)
+print('time 500d:')
+print(t500)
+print('time 1000d:')
+print(t1000)
 
 #print(Rosen_fun_d1(np.array([guess,guess])))
 #print(Hessian(np.array([guess,guess])))

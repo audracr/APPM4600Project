@@ -4,6 +4,8 @@ from scipy.linalg import inv
 from scipy import differentiate
 from timeit import default_timer as timer
 
+#Citation: https://github.com/trsav/bfgs
+
 def f(x): #currently this is just Rosenbrock written by a fellow better at code then I
     #FUNCTION TO BE OPTIMISED
     d = len(x)
@@ -103,21 +105,23 @@ def BFGS(f,x0,max_it,plot=False):
     numN = rnN.shape[0];
     print(rnN[0:(numN-1)])
     errN = np.max(np.abs(rnN[0:(numN-1)]-rN),1);
-    plt.plot(np.arange(numN-1),np.log10(errN+1e-18),'b-o',label='Newton');
-    plt.title('Newton iteration log10|r-rn|');
+    plt.plot(np.arange(numN-1),np.log10(errN+1e-18),'b-o',label='BFGS');
+    plt.title('BFGS iteration log10|r-rn|');
     plt.legend();
-    plt.show();
+    #plt.show();
 
     return x
 
 
 
 
-guess2 = 100*np.ones(2)
-guess5 = 100*np.ones(5)
-guess10 = 100*np.ones(10)
-guess50 = 100*np.ones(50)
-guess100 = 100*np.ones(100)
+guess2 = 10*np.ones(2)
+guess5 = 10*np.ones(5)
+guess10 = 10*np.ones(10)
+guess50 = 10*np.ones(50)
+guess100 = 10*np.ones(100)
+guess500 = 10*np.ones(500)
+guess1000 = 10*np.ones(1000)
 
 start = timer()
 x_opt = BFGS(f,guess2,100,plot=True)
@@ -149,6 +153,18 @@ print(x_opt)
 end = timer()
 t100 = end - start
 
+start = timer()
+x_opt = BFGS(f,guess500,100,plot=True)
+print(x_opt)
+end = timer()
+t500 = end - start
+
+start = timer()
+x_opt = BFGS(f,guess1000,100,plot=True)
+print(x_opt)
+end = timer()
+t1000 = end - start
+
 print('time 2d:')
 print(t2)
 print('time 5d:')
@@ -159,4 +175,8 @@ print('time 50d:')
 print(t50)
 print('time 100d:')
 print(t100)
+print('time 500d:')
+print(t500)
+print('time 1000d:')
+print(t1000)
 

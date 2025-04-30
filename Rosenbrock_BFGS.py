@@ -3,16 +3,30 @@ import matplotlib.pyplot as plt
 from scipy.linalg import inv
 from scipy import differentiate
 
+#Citation: https://github.com/trsav/bfgs
 
 def f(x_guess): #1d Rosenbrock
     term_1 = 100*(x_guess[1]-x_guess[0]**2)**2+(x_guess[0]-1)**2
     return term_1
 
+def grad(f,x): 
+    '''
+    CENTRAL FINITE DIFFERENCE CALCULATION
+    '''
+    d = len(x)
+    sum = np.zeros(d)
+    for i in range(len(x)):
+        if i+1<d:
+            sum[i] = 200*(x[i+1]-x[i]**2)*(-2*x[i])+2*(x[i]-1)
+        else: 
+            sum[i] = 200*(x[i]-x[i-1]**2)
+    return sum
+'''
 def grad(f,x_guess):
     df_dx0 = 200*(x_guess[1]-x_guess[0]**2)*(-2*x_guess[0])+2*(x_guess[0]-1)
     df_dx1 = 200*(x_guess[1]-x_guess[0]**2)
     return np.array([df_dx0, df_dx1])
-
+'''
 def line_search(f,x,p,nabla): #;-;
     '''
     BACKTRACK LINE SEARCH WITH WOLFE CONDITIONS
@@ -54,6 +68,7 @@ def BFGS(f,x0,max_it,plot=False):
     x = x0[:]
     rn = np.array([x])
     it = 2 
+    '''
     if plot == True: 
         if d == 2: 
             x_store =  np.zeros((1,2)) # storing x values 
@@ -61,8 +76,8 @@ def BFGS(f,x0,max_it,plot=False):
         else: 
             print('Too many dimensions to produce trajectory plot!')
             plot = False
-
-    while np.linalg.norm(nabla) > 1e-5: # while gradient is positive
+    '''
+    while np.linalg.norm(nabla) > 1e-14: # while gradient is positive
         if it > max_it: 
             print('Maximum iterations reached!')
             break
@@ -84,9 +99,11 @@ def BFGS(f,x0,max_it,plot=False):
         H = hess_inter + (r*((s@(s.T)))) # BFGS Update
         nabla = nabla_new[:] 
         x = x_new[:]
-        if plot == True:
-            x_store = np.append(x_store,[x],axis=0) # storing x
+        #if plot == True:
+        #    x_store = np.append(x_store,[x],axis=0) # storing x
         rn = np.append(rn, np.array([x]), axis=0)
+        
+    print(len(rn))
     
     rN=x
     rnN = rn
@@ -94,12 +111,14 @@ def BFGS(f,x0,max_it,plot=False):
     numN = rnN.shape[0];
     print(rnN[0:(numN-1)])
     errN = np.max(np.abs(rnN[0:(numN-1)]-rN),1);
-    plt.plot(np.arange(numN-1),np.log10(errN+1e-18),'b-o',label='Newton');
-    plt.title('Newton iteration log10|r-rn|');
+    plt.plot(np.arange(numN-1),np.log10(errN+1e-18),'b-o',label='BFGS');
+    plt.title('d=2 BFGS: log₁₀|x - x*| (Finite Differences)')
+    plt.xlabel('Iteration')
+    plt.ylabel('log₁₀(Error)')
     plt.legend();
     plt.show();
 
     return x
 
-x_opt = BFGS(f,[-1.2,1],100,plot=True)
+x_opt = BFGS(f,[15,15],100,plot=True)
 print(x_opt)
